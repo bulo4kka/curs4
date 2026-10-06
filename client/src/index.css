@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { background: #0B0B0B; }
+.glass { background: rgba(28,28,30,0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+.dot { font-family: 'Silkscreen', monospace; }
+.live-dot { width: 8px; height: 8px; border-radius: 9999px; background: #FF0000; box-shadow: 0 0 8px #FF0000; display: inline-block; animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
+input, select, textarea { background: #111; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 12px; width: 100%; }
+button { transition: all .15s; }
