@@ -10,8 +10,10 @@ export default {
         led2: '#D71921',
       },
       fontFamily: {
-        dot: ['Silkscreen', 'monospace'],
-        body: ['"Space Grotesk"', 'Inter', 'sans-serif'],
+        dot: ['Silkscreen', 'Unbounded', 'monospace'],
+        ndot: ['Silkscreen', 'monospace'],
+        display: ['Unbounded', 'sans-serif'],
+        body: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
       },
     },
   },

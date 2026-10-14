@@ -91,6 +91,7 @@ function initSchema() {
     created_at TEXT DEFAULT (datetime('now'))
   );
   `);
+  try { db.exec('ALTER TABLE notifications ADD COLUMN link TEXT'); } catch (e) { /* exists */ }
 }
 
 module.exports = { db, initSchema, DB_PATH };

@@ -2,9 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-body { background: #0B0B0B; }
+html, body, #root { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
+#root { display: flex; flex-direction: column; min-height: 100vh; }
+#root > footer { margin-top: auto; }
+body {
+  background: #0B0B0B;
+  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-attachment: fixed;
+}
+html { scroll-behavior: auto; }
 .glass { background: rgba(28,28,30,0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-.dot { font-family: 'Silkscreen', monospace; }
+.dot { font-family: 'Silkscreen', 'Unbounded', monospace; letter-spacing: .02em; }
+input[type="date"] { color-scheme: dark; }
 .live-dot { width: 8px; height: 8px; border-radius: 9999px; background: #FF0000; box-shadow: 0 0 8px #FF0000; display: inline-block; animation: pulse 1.2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
 input, select, textarea { background: #111; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 12px; width: 100%; }

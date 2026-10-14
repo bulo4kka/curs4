@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { getSocket } from '../socket';
 
 export default function Chats() {
   const { user } = useAuth();
+  const { chatId } = useParams();
   const [chats, setChats] = useState([]);
   const [active, setActive] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -13,7 +15,7 @@ export default function Chats() {
   const bottomRef = useRef();
   const socket = getSocket();
 
-  useEffect(() => { if (user) api(`/chats?userId=${user.id}`).then(setChats); }, [user]);
+  useEffect(() => { if (user) api(`/chats?userId=${user.id}`).then(cs => { setChats(cs); if (chatId) setActive(cs.find(c => c.id === Number(chatId)) || null); }); }, [user, chatId]);
 
   useEffect(() => {
     if (!active || !user) return;

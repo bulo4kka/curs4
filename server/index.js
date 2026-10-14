@@ -14,8 +14,8 @@ const io = new Server(server, { cors: { origin: '*' } });
 
 // ---------- helpers ----------
 const wrap = fn => (req, res) => { try { fn(req, res); } catch (e) { res.status(500).json({ error: e.message }); } };
-function notify(userId, title, text, type = 'info') {
-  db.prepare('INSERT INTO notifications (user_id,title,text,type) VALUES (?,?,?,?)').run(userId, title, text, type);
+function notify(userId, title, text, type = 'info', link = null) {
+  db.prepare('INSERT INTO notifications (user_id,title,text,type,link) VALUES (?,?,?,?,?)').run(userId, title, text, type, link);
 }
 function parseTrip(t) {
   if (!t) return t;
@@ -42,7 +42,7 @@ app.post('/api/auth/register', wrap((req, res) => {
   } catch (e) { res.status(400).json({ error: 'Email уже занят' }); }
 }));
 app.get('/api/auth/quick-users', wrap((req, res) => {
-  res.json(db.prepare("SELECT id,full_name,role,email,rating,balance FROM users WHERE is_blocked=0 ORDER BY CASE role WHEN 'CLIENT' THEN 0 WHEN 'DRIVER' THEN 1 ELSE 2 END").all());
+  res.json(db.prepare("SELECT id,full_name,role,email,phone,rating,balance FROM users WHERE is_blocked=0 ORDER BY CASE role WHEN 'CLIENT' THEN 0 WHEN 'DRIVER' THEN 1 ELSE 2 END").all());
 }));
 
 // ---------- TRIPS ----------
@@ -124,8 +124,8 @@ app.post('/api/trips/:id/book', wrap((req, res) => {
   });
   try {
     const id = tx();
-    notify(passenger_id, 'Бронирование подтверждено', `${trip.origin} → ${trip.destination}`, 'booking');
-    notify(trip.driver_id, 'Новая бронь', `Пассажир забронировал ${seats} мест(а)`, 'booking');
+    notify(passenger_id, 'Бронирование подтверждено', `${trip.origin} → ${trip.destination}`, 'booking', `/trip/${trip.id}`);
+    notify(trip.driver_id, 'Новая бронь', `Пассажир забронировал ${seats} мест(а)`, 'booking', `/trip/${trip.id}`);
     res.json(db.prepare('SELECT * FROM rentals WHERE id=?').get(id));
   } catch (e) { res.status(409).json({ error: e.message }); }
 }));
@@ -262,6 +262,10 @@ app.post('/api/notifications/:userId/read', wrap((req, res) => {
   db.prepare('UPDATE notifications SET is_read=1 WHERE user_id=?').run(req.params.userId);
   res.json({ ok: true });
 }));
+app.post('/api/notifications/item/:id/read', wrap((req, res) => {
+  db.prepare('UPDATE notifications SET is_read=1 WHERE id=?').run(req.params.id);
+  res.json({ ok: true });
+}));
 
 // ---------- ADMIN ----------
 app.get('/api/admin/users', wrap((req, res) => {
@@ -317,7 +321,7 @@ io.on('connection', socket => {
     // оповещения остальным участникам
     db.prepare('SELECT user_id FROM chat_participants WHERE chat_id=? AND user_id!=?').all(chatId, senderId)
       .forEach(p => {
-        notify(p.user_id, 'Новое сообщение', text.slice(0, 60), 'chat');
+        notify(p.user_id, 'Новое сообщение', text.slice(0, 60), 'chat', `/chat/${chatId}`);
         io.to('user_' + p.user_id).emit('chat_notification', { chatId, text });
       });
   });

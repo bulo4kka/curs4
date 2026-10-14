@@ -12,17 +12,21 @@ export default function Login() {
 
   const submit = async e => {
     e.preventDefault();
-    try { login(await api('/auth/login', { method: 'POST', body: { email, password } })); nav('/'); }
-    catch (e) { setMsg(e.message); }
+    setMsg('');
+    try {
+      const u = await api('/auth/login', { method: 'POST', body: { email: email.trim().toLowerCase(), password } });
+      login(u);
+      nav('/');
+    } catch (err) { setMsg(err.message); }
   };
 
   return (
     <div className="max-w-md mx-auto p-8">
       <h1 className="font-dot text-2xl mb-4">Вход</h1>
       <form onSubmit={submit} className="glass rounded-xl p-4 space-y-3">
-        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="email" />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="пароль" />
-        <button className="bg-led rounded-lg w-full py-2 font-dot">ВОЙТИ</button>
+        <input type="email" name="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="email" />
+        <input type="password" name="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="пароль" />
+        <button type="submit" className="bg-led hover:bg-led2 rounded-lg w-full py-2 font-dot">ВОЙТИ</button>
         {msg && <p className="text-led text-sm">{msg}</p>}
         <p className="text-xs text-gray-500">admin@seatmate.by / admin123 · driver1@seatmate.by / 1234 · client1@seatmate.by / 1234</p>
       </form>
