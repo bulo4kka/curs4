@@ -15,6 +15,7 @@ export default function Header() {
   const [switchOpen, setSwitchOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => { api('/auth/quick-users').then(setQuickUsers).catch(() => {}); }, []);
   useEffect(() => {
@@ -58,14 +59,11 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-[var(--bg)]/80 backdrop-blur-xl border-b border-[var(--border)] px-4 py-2">
       <div className="max-w-full mx-auto flex items-center justify-between gap-4 h-12">
-        {/* LEFT: Logo + LIVE + Navigation */}
+        {/* LEFT: Logo + Navigation */}
         <div className="flex items-center gap-3 shrink-0">
           <Link to="/" className="dot text-lg text-[var(--text)] flex items-center gap-2" aria-label="SeatMate Home">
             <span>SEAT</span><span className="text-[var(--accent)]">MATE</span>
           </Link>
-          <span className="hidden sm:flex items-center gap-1.5 ndot text-[10px] text-[var(--text-muted)] px-2 py-0.5 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-full">
-            <span className="live-dot" /> LIVE
-          </span>
           <nav className="hidden md:flex items-center gap-1" role="navigation" aria-label="Main navigation">
             <Link to="/" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-elevated)] transition-colors">Поездки</Link>
             {user && <Link to="/create" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-elevated)] transition-colors">Создать</Link>}
@@ -133,11 +131,40 @@ export default function Header() {
           )}
         </div>
 
-        {/* Mobile menu placeholder */}
-        <button className="md:hidden h-11 w-11 flex items-center justify-center rounded-xl bg-[var(--bg-elevated)]/80 border border-[var(--border)]" aria-label="Menu">
+        {/* Mobile navigation toggle */}
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(open => !open)}
+          className="md:hidden h-11 w-11 flex items-center justify-center rounded-xl bg-[var(--bg-elevated)]/80 border border-[var(--border)]"
+          aria-label={mobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+          aria-expanded={mobileMenuOpen}
+        >
           <span className="w-5 h-0.5 bg-[var(--text-muted)] relative" />
         </button>
       </div>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.16 }}
+            className="md:hidden flex flex-col gap-1 border-t border-[var(--border)] pt-2 mt-2"
+            aria-label="Мобильная навигация"
+          >
+            {[
+              ['Поездки', '/'],
+              ...(user ? [['Создать поездку', '/create'], ['Чаты', '/chats'], ['Профиль', '/profile']] : []),
+              ...(user?.role === 'ADMIN' ? [['Администрирование', '/admin']] : []),
+            ].map(([label, to]) => (
+              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2.5 text-sm text-[var(--text-muted)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text)] transition-colors">
+                {label}
+              </Link>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       {/* NOTIFICATIONS DROPDOWN */}
       <AnimatePresence>
@@ -147,7 +174,7 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 right-0 z-50 w-full md:w-96 max-h-[85vh] flex flex-col bg-[var(--bg)]/95 backdrop-blur-xl border-l border-[var(--border)] overscroll-contain"
+            className="absolute top-full right-3 mt-2 z-50 w-[min(24rem,calc(100vw-1.5rem))] max-h-[calc(100dvh-var(--header-height)-1.5rem)] flex flex-col bg-[var(--bg)]/95 backdrop-blur-xl border border-[var(--border)] rounded-2xl shadow-2xl overscroll-contain"
             onClick={() => setOpenNotif(false)}
             onWheel={e => e.stopPropagation()}
             role="dialog"

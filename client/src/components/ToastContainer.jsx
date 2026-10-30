@@ -3,15 +3,7 @@ import { useContext } from 'react';
 import { ToastContext } from '../context/ToastContext';
 import Toast from './Toast';
 
-const TOAST_CONFIG = {
-  gap: 10,
-  padding: 20,
-  maxWidth: 380,
-  // Position: below header (header is ~64px + 4px border = 68px)
-  // Add safe margin from top
-  topOffset: 90,
-  rightOffset: 20,
-};
+const TOAST_CONFIG = { gap: 10, maxWidth: 380 };
 
 export default function ToastContainer() {
   const { toasts, removeToast } = useContext(ToastContext);
@@ -24,15 +16,12 @@ export default function ToastContainer() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed pointer-events-none"
+        className="fixed pointer-events-none toast-stack"
         style={{
-          top: TOAST_CONFIG.topOffset,
-          right: TOAST_CONFIG.rightOffset,
-          zIndex: 9999, // Below header (header is z-50 = 50, but header has backdrop so 9999 is fine)
+          zIndex: 40,
           display: 'flex',
           flexDirection: 'column',
           gap: TOAST_CONFIG.gap,
-          padding: TOAST_CONFIG.padding,
           maxWidth: TOAST_CONFIG.maxWidth,
           pointerEvents: 'auto',
         }}

@@ -4,13 +4,14 @@
 
 @layer base {
   :root {
+    --header-height: 68px;
     --bg: #09090b;
     --bg-elevated: #18181b;
     --border: #27272a;
     --border-hover: #3f3f46;
     --text: #fafafa;
-    --text-muted: #71717a;
-    --text-dim: #3f3f46;
+    --text-muted: #a1a1aa;
+    --text-dim: #71717a;
     --accent: #ef4444;
     --accent-hover: #dc2626;
     --accent-muted: #7f1d1d;
@@ -56,6 +57,15 @@
     scroll-behavior: auto;
   }
 
+  [id] {
+    scroll-margin-top: calc(var(--header-height) + 12px);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -69,6 +79,18 @@
 }
 
 @layer components {
+  .toast-stack {
+    top: calc(var(--header-height) + 12px + env(safe-area-inset-top, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+    width: min(380px, calc(100vw - 24px));
+    max-height: calc(100dvh - var(--header-height) - 24px - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+  }
+
+  @media (max-width: 640px) {
+    .toast-stack { right: 8px; width: calc(100vw - 16px); }
+  }
+
   .glass {
     background: rgba(24, 24, 27, 0.8);
     backdrop-filter: blur(12px);
@@ -95,11 +117,11 @@
   }
 
   .btn-primary {
-    background: var(--accent);
+    background: #b91c1c;
     color: white;
   }
   .btn-primary:hover {
-    background: var(--accent-hover);
+    background: #991b1b;
   }
   .btn-primary:active {
     transform: scale(0.98);

@@ -73,6 +73,13 @@ export default function Home() {
   const [tab, setTab] = useState('passenger');
   const [faqOpen, setFaqOpen] = useState(null);
 
+  const scrollToTripsFeed = () => {
+    const feed = document.getElementById('trips-feed');
+    if (!feed) return;
+    if (window.lenis) window.lenis.scrollTo(feed, { offset: -80 });
+    else feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   useEffect(() => { api('/trips').then(setTrips).catch(() => setTrips([])); }, []);
 
   const filtered = useMemo(() => trips.filter(t => {
@@ -105,7 +112,7 @@ export default function Home() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="dot text-[var(--accent)] text-sm mb-6 flex items-center gap-2"
             >
-              <span className="live-dot" /> [ 00 // TRAVEL TOGETHER ]
+              [ 00 // TRAVEL TOGETHER ]
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
@@ -150,7 +157,7 @@ export default function Home() {
                 />
               </div>
               <button
-                onClick={() => document.getElementById('trips-feed')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={scrollToTripsFeed}
                 className="btn btn-primary h-12 px-6 tracking-wider"
               >
                 Найти поездку
@@ -171,7 +178,7 @@ export default function Home() {
           </div>
         </div>
         <button
-          onClick={() => document.getElementById('trips-feed')?.scrollIntoView({ behavior: 'smooth' })}
+          onClick={scrollToTripsFeed}
           className="relative z-10 pb-8 text-center dot text-xs text-[var(--text-muted)] tracking-widest cursor-pointer hover:text-[var(--accent)] transition-colors"
           aria-label="Scroll to trips"
         >
@@ -351,8 +358,10 @@ export default function Home() {
               key={r.name}
               onClick={() => {
                 setFilters(s => ({ ...s, origin: r.origin, destination: r.destination }));
-                document.getElementById('trips-feed')?.scrollIntoView({ behavior: 'smooth' });
+                scrollToTripsFeed();
               }}
+              type="button"
+              aria-label={`Показать поездки по маршруту ${r.name}`}
               layout
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -399,7 +408,7 @@ export default function Home() {
       {/* HOW IT WORKS — Read Mode */}
       <Section id="how" index="04 // HOW" title="Как это работает">
         <div className="flex gap-2 mb-10 flex-wrap">
-          {['passenger', 'driver'].map(([k, v]) => (
+          {['passenger', 'driver'].map(k => (
             <button
               key={k}
               onClick={() => setTab(k)}
@@ -409,7 +418,7 @@ export default function Home() {
                   : 'border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--border-hover)] hover:text-[var(--text)]'
               }`}
             >
-              {v === 'passenger' ? 'Пассажиру' : 'Водителю'}
+              {k === 'passenger' ? 'Пассажиру' : 'Водителю'}
             </button>
           ))}
         </div>
