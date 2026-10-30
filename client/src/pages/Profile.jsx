@@ -15,8 +15,8 @@ export default function Profile() {
 
   const load = () => { if (user) api(`/users/${user.id}`).then(setP).catch(() => setP(null)); };
   useEffect(() => { load(); }, [user]);
-  if (!user) return <div className="p-8 text-center text-[var(--text-muted)]">Войдите или выберите аккаунт в шапке.</div>;
-  if (!p) return <div className="p-8 text-center text-[var(--text-muted)]">Загрузка…</div>;
+  if (!user) return <div className="page-shell p-8 text-center text-[var(--text-muted)]">Войдите или выберите аккаунт в шапке.</div>;
+  if (!p) return <div className="page-shell p-8 text-center text-[var(--text-muted)]">Загрузка…</div>;
 
   const cancelRental = async id => { await api(`/rentals/${id}/cancel`, { method: 'POST' }); load(); };
   const addVehicle = async e => {
@@ -40,18 +40,19 @@ export default function Profile() {
   if (p.role === 'DRIVER') tabs.splice(2, 0, { id: 'vehicles', label: 'Авто', icon: <Car size={16} /> });
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-4">
+    <div className="profile-page page-shell max-w-5xl mx-auto p-4 sm:p-6 space-y-5">
       {/* Profile Header */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="surface rounded-xl p-4 md:p-6 flex flex-col md:flex-row md:items-center gap-4"
+        className="surface profile-hero rounded-2xl p-5 md:p-7 flex flex-col md:flex-row md:items-center gap-4"
       >
         <div className="avatar avatar-lg shrink-0">
           {(p.full_name || '?')[0]}
         </div>
         <div className="min-w-0 flex-1">
-          <h1 className="dot text-2xl md:text-3xl truncate">{p.full_name}</h1>
+          <span className="section-kicker">ПРОФИЛЬ // {p.role === 'DRIVER' ? 'ВОДИТЕЛЬ' : 'ПАССАЖИР'}</span>
+          <h1 className="dot text-2xl md:text-3xl truncate mt-1">{p.full_name}</h1>
           <p className="text-sm text-[var(--text-muted)] mt-1 flex flex-wrap gap-4">
             <span>{p.email}</span>
             <span>{p.phone}</span>
@@ -69,7 +70,7 @@ export default function Profile() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="surface rounded-xl p-1 flex flex-wrap gap-1"
+        className="surface profile-tabs rounded-2xl p-1.5 flex flex-wrap gap-1.5"
         role="tablist"
       >
         {tabs.map(tab => (

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageCircle, UserCircle, Shield, Bell, X, LogIn } from 'lucide-react';
+import { MessageCircle, UserCircle, Shield, Bell, X, LogIn, LogOut, Menu, MapPin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api';
 import { createPortal } from 'react-dom';
@@ -57,19 +57,20 @@ export default function Header() {
   const closeLogout = useCallback(() => { setLogoutOpen(false); }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--bg)]/80 backdrop-blur-xl border-b border-[var(--border)] px-4 py-2">
-      <div className="max-w-full mx-auto flex items-center justify-between gap-4 h-12">
+    <header className="site-header sticky top-0 z-50 px-4 md:px-6">
+      <div className="site-header-inner max-w-7xl mx-auto flex items-center justify-between gap-4 h-16">
         {/* LEFT: Logo + Navigation */}
         <div className="flex items-center gap-3 shrink-0">
-          <Link to="/" className="dot text-lg text-[var(--text)] flex items-center gap-2" aria-label="SeatMate Home">
-            <span>SEAT</span><span className="text-[var(--accent)]">MATE</span>
+          <Link to="/" className="brand-mark" aria-label="SeatMate — главная">
+            <span className="brand-symbol"><MapPin size={18} strokeWidth={2.4} /></span>
+            <span>seat<span>mate</span></span>
           </Link>
-          <nav className="hidden md:flex items-center gap-1" role="navigation" aria-label="Main navigation">
-            <Link to="/" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-elevated)] transition-colors">Поездки</Link>
-            {user && <Link to="/create" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-elevated)] transition-colors">Создать</Link>}
-            {user && <Link to="/chats" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-elevated)] transition-colors flex items-center gap-1"><MessageCircle size={13} /> Чат</Link>}
-            {user && <Link to="/profile" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-elevated)] transition-colors flex items-center gap-1"><UserCircle size={13} /> Профиль</Link>}
-            {user?.role === 'ADMIN' && <Link to="/admin" className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--accent)] hover:bg-[var(--accent-muted)] transition-colors flex items-center gap-1"><Shield size={13} /> Админ</Link>}
+          <nav className="site-navigation hidden md:flex items-center gap-1" role="navigation" aria-label="Главная навигация">
+            <Link to="/" className="site-nav-link">Поездки</Link>
+            {user && <Link to="/create" className="site-nav-link">Создать</Link>}
+            {user && <Link to="/chats" className="site-nav-link"><MessageCircle size={15} /> Чаты</Link>}
+            {user && <Link to="/profile" className="site-nav-link"><UserCircle size={15} /> Профиль</Link>}
+            {user?.role === 'ADMIN' && <Link to="/admin" className="site-nav-link site-nav-admin"><Shield size={15} /> Админ</Link>}
           </nav>
         </div>
 
@@ -80,7 +81,7 @@ export default function Header() {
               {/* Notifications Bell */}
               <button
                 onClick={() => setOpenNotif(!openNotif)}
-                className="relative h-11 w-11 flex items-center justify-center rounded-xl bg-[var(--bg-elevated)]/80 border border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-elevated)] transition-colors"
+                className="header-icon-button relative"
                 aria-label={`Уведомления${unread > 0 ? ` (${unread})` : ''}`}
               >
                 <Bell size={18} className="text-[var(--text-muted)]" />
@@ -92,13 +93,13 @@ export default function Header() {
               </button>
 
               {/* Profile Card */}
-              <div className="h-11 flex items-center gap-2 bg-[var(--bg-elevated)]/80 border border-[var(--border)] rounded-xl px-3 pr-2">
+              <div className="header-user-chip flex items-center gap-2">
                 <div className="avatar avatar-sm shrink-0">
                   {(user.full_name || '?')[0]}
                 </div>
                 <div className="hidden sm:block leading-tight min-w-0">
                   <div className="text-sm font-medium text-[var(--text)] truncate max-w-[140px]">{user.full_name}</div>
-                  <div className="ndot text-[9px] text-[var(--text-muted)] flex items-center gap-1">
+                  <div className="text-[10px] text-[var(--text-muted)] flex items-center gap-1.5">
                     <span>{user.role}</span>
                     <span className="text-[var(--accent)]">{Number(user.balance || 0).toFixed(1)} BYN</span>
                   </div>
@@ -108,7 +109,7 @@ export default function Header() {
               {/* Switch Account */}
               <button
                 onClick={openSwitch}
-                className="h-11 px-4 rounded-xl bg-[var(--bg-elevated)]/80 border border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-elevated)] text-sm font-medium text-[var(--text-muted)] transition-colors hidden sm:flex items-center gap-1"
+                className="btn btn-secondary header-account-action hidden sm:flex"
               >
                 <LogIn size={13} /> Сменить
               </button>
@@ -116,7 +117,7 @@ export default function Header() {
               {/* Logout */}
               <button
                 onClick={openLogout}
-                className="h-11 px-4 rounded-xl bg-transparent border border-[var(--border)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-muted)]/20 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors hidden sm:flex items-center gap-1"
+                className="btn btn-ghost header-account-action hidden sm:flex"
               >
                 <LogIn size={13} className="rotate-180" /> Выйти
               </button>
@@ -124,7 +125,7 @@ export default function Header() {
           ) : (
             <Link
               to="/login"
-              className="h-11 px-5 rounded-xl bg-[var(--bg-elevated)]/80 border border-[var(--border)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-muted)]/20 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-1"
+              className="btn btn-secondary header-login"
             >
               <LogIn size={13} /> Войти
             </Link>
@@ -135,11 +136,11 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(open => !open)}
-          className="md:hidden h-11 w-11 flex items-center justify-center rounded-xl bg-[var(--bg-elevated)]/80 border border-[var(--border)]"
+          className="header-icon-button md:hidden"
           aria-label={mobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
           aria-expanded={mobileMenuOpen}
         >
-          <span className="w-5 h-0.5 bg-[var(--text-muted)] relative" />
+          {mobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
         </button>
       </div>
 
@@ -150,7 +151,7 @@ export default function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
-            className="md:hidden flex flex-col gap-1 border-t border-[var(--border)] pt-2 mt-2"
+            className="mobile-nav md:hidden flex flex-col gap-1 border-t border-[var(--border)] pt-3 pb-4 mt-1"
             aria-label="Мобильная навигация"
           >
             {[
@@ -158,10 +159,11 @@ export default function Header() {
               ...(user ? [['Создать поездку', '/create'], ['Чаты', '/chats'], ['Профиль', '/profile']] : []),
               ...(user?.role === 'ADMIN' ? [['Администрирование', '/admin']] : []),
             ].map(([label, to]) => (
-              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2.5 text-sm text-[var(--text-muted)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text)] transition-colors">
+              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">
                 {label}
               </Link>
             ))}
+            {user && <button type="button" onClick={() => { logout(); setMobileMenuOpen(false); nav('/'); }} className="mobile-nav-link mobile-nav-logout"><LogOut size={15} /> Выйти</button>}
           </motion.nav>
         )}
       </AnimatePresence>
@@ -174,7 +176,7 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-full right-3 mt-2 z-50 w-[min(24rem,calc(100vw-1.5rem))] max-h-[calc(100dvh-var(--header-height)-1.5rem)] flex flex-col bg-[var(--bg)]/95 backdrop-blur-xl border border-[var(--border)] rounded-2xl shadow-2xl overscroll-contain"
+            className="notification-panel absolute top-full right-3 mt-2 z-50 w-[min(24rem,calc(100vw-1.5rem))] max-h-[calc(100dvh-var(--header-height)-1.5rem)] flex flex-col overscroll-contain"
             onClick={() => setOpenNotif(false)}
             onWheel={e => e.stopPropagation()}
             role="dialog"
@@ -245,7 +247,7 @@ export default function Header() {
                           <div className="display text-sm text-[var(--text)] truncate">{u.full_name}</div>
                           <div className="text-[10px] text-[var(--text-muted)] truncate">{u.email} · {u.phone}</div>
                         </div>
-                        {isCurrent && <span className="ml-auto ndot text-[9px] text-[var(--accent)] flex items-center gap-1"><span className="live-dot-sm" /> ACTIVE</span>}
+                        {isCurrent && <span className="ml-auto ndot text-[9px] text-[var(--accent)]">ACTIVE</span>}
                       </div>
                       <div className="flex items-center justify-between mt-3">
                         <span className="ndot text-[10px] text-[var(--text-muted)] border border-[var(--border)] rounded-full px-2 py-0.5">{u.role}</span>

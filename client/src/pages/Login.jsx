@@ -28,14 +28,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-8">
+    <div className="login-page page-shell min-h-[calc(100vh-64px)] flex items-center justify-center px-5 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h1 className="dot text-2xl mb-4">Вход</h1>
-        <form onSubmit={submit} className="surface rounded-xl p-6 space-y-4">
+        <div className="login-intro">
+          <span className="section-kicker">SEATMATE // ДОБРО ПОЖАЛОВАТЬ</span>
+          <h1 className="page-title mt-3 mb-2">Снова в пути</h1>
+          <p className="text-sm text-[var(--text-muted)] mb-6">Войдите, чтобы управлять поездками и общаться с попутчиками.</p>
+        </div>
+        <form onSubmit={submit} className="surface login-form rounded-2xl p-6 sm:p-8 space-y-5">
           <div>
             <label className="label">Email</label>
             <input
@@ -70,7 +74,7 @@ export default function Login() {
             {loading ? 'ВХОД...' : 'ВОЙТИ'}
           </button>
           {msg && <p className="text-sm text-[var(--accent)]" role="alert">{msg}</p>}
-          <p className="text-xs text-[var(--text-dim)] text-center">
+          <p className="text-xs text-[var(--text-dim)] text-center leading-relaxed">
             admin@seatmate.by / admin123 · driver1@seatmate.by / 1234 · client1@seatmate.by / 1234
           </p>
         </form>

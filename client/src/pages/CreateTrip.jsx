@@ -31,7 +31,7 @@ export default function CreateTrip() {
   }, [user]);
 
   if (!user) return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl mx-auto p-8 text-center">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="page-shell max-w-2xl mx-auto p-8 text-center">
       <div className="surface rounded-xl p-12">
         <Car size={48} className="mx-auto text-[var(--text-muted)] mb-4" />
         <h1 className="dot text-2xl mb-2">Войдите как водитель</h1>
@@ -57,10 +57,14 @@ export default function CreateTrip() {
   const cityOptions = Object.keys(CITIES).map(c => <option key={c} value={c}>{c}</option>);
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <motion.h1 initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="dot text-2xl mb-6">Новая поездка</motion.h1>
+    <div className="create-trip-page page-shell max-w-3xl mx-auto p-4 sm:p-6">
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="page-heading mb-6">
+        <span className="section-kicker">МАРШРУТ // НОВАЯ ПОЕЗДКА</span>
+        <h1 className="page-title mt-3">Запланируйте поездку</h1>
+        <p className="text-sm text-[var(--text-muted)] mt-2">Укажите маршрут и условия, чтобы пассажиры могли присоединиться.</p>
+      </motion.div>
 
-      <form onSubmit={submit} className="surface rounded-xl p-6 space-y-5">
+      <form onSubmit={submit} className="surface create-trip-form rounded-2xl p-5 sm:p-7 space-y-6">
         {/* Route */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="space-y-4">
           <h3 className="dot text-sm text-[var(--text-muted)] tracking-wider">МАРШРУТ</h3>

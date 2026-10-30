@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--bg)] w-full">
-      <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+    <footer className="site-footer w-full">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 py-12 md:py-16 grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-8 md:gap-12 text-sm">
         <div>
-          <div className="dot text-lg mb-3">SEAT<span className="text-[var(--accent)]">MATE</span></div>
-          <p className="text-[var(--text-muted)] leading-relaxed">Совместные поездки по Беларуси. Делитесь дорогой — экономьте топливо и время.</p>
+          <div className="brand-mark footer-brand"><span className="brand-symbol"><span>↗</span></span><span>seat<span>mate</span></span></div>
+          <p className="text-[var(--text-muted)] leading-relaxed max-w-xs mt-4">Совместные поездки по Беларуси. Делитесь дорогой — экономьте топливо и время.</p>
         </div>
         <div>
-          <h4 className="dot text-xs text-[var(--text-dim)] mb-3">НАВИГАЦИЯ</h4>
+          <h4 className="footer-heading">НАВИГАЦИЯ</h4>
           <ul className="space-y-2 text-[var(--text-muted)]">
             <li><Link to="/" className="hover:text-[var(--accent)] transition-colors">Поездки</Link></li>
             <li><Link to="/create" className="hover:text-[var(--accent)] transition-colors">Создать поездку</Link></li>
@@ -18,13 +18,13 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="dot text-xs text-[var(--text-dim)] mb-3">ПОПУЛЯРНЫЕ ГОРОДА</h4>
+          <h4 className="footer-heading">ПОПУЛЯРНЫЕ ГОРОДА</h4>
           <ul className="space-y-2 text-[var(--text-muted)]">
             {['Минск', 'Полоцк', 'Витебск', 'Гродно', 'Брест', 'Гомель'].map(c => <li key={c}><Link to="/#routes" className="hover:text-[var(--accent)] transition-colors">{c}</Link></li>)}
           </ul>
         </div>
         <div>
-          <h4 className="dot text-xs text-[var(--text-dim)] mb-3">ПОДДЕРЖКА</h4>
+          <h4 className="footer-heading">ПОДДЕРЖКА</h4>
           <ul className="space-y-2 text-[var(--text-muted)]">
             <li><Link to="/#safety" className="hover:text-[var(--accent)] transition-colors">Безопасность</Link></li>
             <li><Link to="/#faq" className="hover:text-[var(--accent)] transition-colors">Условия использования</Link></li>
@@ -32,10 +32,9 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-[var(--border)] px-4 py-4 max-w-6xl mx-auto flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-[var(--text-dim)]">
+      <div className="footer-bottom max-w-7xl mx-auto px-5 md:px-10 py-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-[var(--text-dim)]">
         <span>© 2026 SeatMate BY. All rights reserved.</span>
-        <span className="flex items-center gap-2 dot"><span className="live-dot" /> [ SERVER: ONLINE // BYN-SYSTEM READY ]</span>
-        <span className="ml-auto">+375 (29) 000-00-00 | support@seatmate.by</span>
+        <span className="ml-auto">+375 (29) 000-00-00 <span aria-hidden="true">·</span> support@seatmate.by</span>
       </div>
     </footer>
   );

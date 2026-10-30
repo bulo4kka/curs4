@@ -26,7 +26,7 @@ export default function Admin() {
   };
   useEffect(load, []);
   if (!user || user.role !== 'ADMIN') return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-8 text-center">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="page-shell p-8 text-center">
       <div className="surface rounded-xl p-12">
         <Shield size={48} className="mx-auto text-[var(--accent)] mb-4" />
         <h1 className="dot text-2xl mb-2 text-[var(--accent)]">Доступ только для ADMIN</h1>
@@ -64,17 +64,18 @@ export default function Admin() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <motion.h1 initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="dot text-2xl md:text-3xl mb-6 text-[var(--accent)] flex items-center gap-3">
-        <Shield size={28} /> ADMIN // GOD MODE
-      </motion.h1>
+    <div className="admin-page page-shell max-w-7xl mx-auto p-4 sm:p-6">
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="page-heading mb-6">
+        <span className="section-kicker">SEATMATE // УПРАВЛЕНИЕ</span>
+        <h1 className="page-title mt-3 flex items-center gap-3"><Shield size={25} className="text-[var(--accent)]" /> Панель администратора</h1>
+      </motion.div>
 
       {/* Tab Navigation */}
       <motion.nav
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="surface rounded-xl p-1 flex flex-wrap gap-1 mb-6"
+        className="surface admin-tabs rounded-2xl p-1.5 flex flex-wrap gap-1.5 mb-6"
         role="tablist"
       >
         {tabs.map(t => (

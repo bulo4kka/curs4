@@ -6,7 +6,7 @@ import Section from '../components/Section';
 import CityInput from '../components/CityInput';
 import DatePicker from '../components/DatePicker';
 import Stepper from '../components/Stepper';
-import { ShieldCheck, Fuel, Zap, Coins, Star, Users, Clock, MapPin, ChevronDown, Car, Package, PawPrint, VolumeX } from 'lucide-react';
+import { ShieldCheck, Fuel, Zap, Coins, Star, Users, Clock, MapPin, ChevronDown, Car, Package, PawPrint, VolumeX, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 const FEATURE_LABELS = { animals: 'Животные', big_trunk: 'Большой багаж', quiet_driver: 'Тихий водитель' };
 const FEATURE_ICONS = { animals: <PawPrint size={12} />, big_trunk: <Package size={12} />, quiet_driver: <VolumeX size={12} /> };
@@ -101,35 +101,46 @@ export default function Home() {
 
   return (
     <div>
-      {/* HERO — Persuade Mode */}
-      <section className="w-full h-[calc(100dvh-64px)] relative overflow-hidden flex flex-col justify-between">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--accent-muted)_0%,_transparent_70%)] opacity-20 pointer-events-none" />
-        <div className="flex-1 flex items-center">
-          <div className="max-w-6xl mx-auto px-4 w-full">
-            <motion.p
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="dot text-[var(--accent)] text-sm mb-6 flex items-center gap-2"
-            >
-              [ 00 // TRAVEL TOGETHER ]
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="dot text-4xl md:text-7xl leading-tight"
-            >
-              SEAT<span className="text-[var(--accent)]">MATE</span><br />
-              <span className="text-[var(--text-muted)] text-2xl md:text-5xl font-body font-normal">// СОВМЕСТНЫЕ ПОЕЗДКИ ПО БЕЛАРУСИ</span>
-            </motion.h1>
+      {/* HERO */}
+      <section className="home-hero relative isolate overflow-hidden">
+        <div className="hero-road absolute inset-0" aria-hidden="true" />
+        <svg className="hero-route absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 1440 760" preserveAspectRatio="none" aria-hidden="true">
+          <path className="route-trace" d="M-60 620 C170 560 170 360 390 395 S710 565 875 350 S1160 120 1510 190" />
+          <circle cx="390" cy="395" r="5" />
+          <circle cx="875" cy="350" r="5" />
+        </svg>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="surface mt-12 rounded-2xl p-4 md:p-6 grid grid-cols-1 md:grid-cols-5 gap-4 items-end"
-            >
+        <div className="home-hero-content relative z-10 max-w-7xl mx-auto w-full px-5 md:px-10 py-14 md:py-20 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-copy"
+          >
+            <h1 className="hero-title">Едем <span>вместе.</span></h1>
+            <p className="hero-lede">Найдите попутчика или поделитесь свободными местами. Одна дорога — больше возможностей.</p>
+            <Link to="/create" className="hero-driver-link">
+              <span className="hero-driver-icon"><ArrowUpRight size={18} /></span>
+              <span><b>Есть свободные места?</b><small>Предложите поездку как водитель</small></span>
+              <ArrowRight size={17} className="ml-auto transition-transform group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.12, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-search surface rounded-3xl p-5 md:p-7"
+          >
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <div>
+                <p className="eyebrow mb-2">SEATMATE · БЕЛАРУСЬ</p>
+                <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Куда держим путь?</h2>
+              </div>
+              <span className="hero-search-mark" aria-hidden="true"><ArrowRight size={20} /></span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col">
                 <label className="label">ОТКУДА</label>
                 <CityInput key="o" value={filters.origin} onChange={v => setFilters({ ...filters, origin: v })} placeholder="Минск" />
@@ -139,50 +150,31 @@ export default function Home() {
                 <CityInput key="d" value={filters.destination} onChange={v => setFilters({ ...filters, destination: v })} placeholder="Полоцк" />
               </div>
               <div className="flex flex-col">
-                <label className="label">ДАТА</label>
-                <DatePicker
-                  value={filters.date}
-                  onChange={v => setFilters({ ...filters, date: v })}
-                  placeholder="Дата"
-                />
+                <label className="label">ДАТА ВЫЕЗДА</label>
+                <DatePicker value={filters.date} onChange={v => setFilters({ ...filters, date: v })} placeholder="Выберите дату" />
               </div>
               <div className="flex flex-col">
-                <label className="label">МЕСТА</label>
-                <Stepper
-                  value={filters.passengers}
-                  onChange={v => setFilters({ ...filters, passengers: v })}
-                  min={1}
-                  max={4}
-                  aria-label="Количество пассажиров"
-                />
+                <label className="label">ПАССАЖИРЫ</label>
+                <Stepper value={filters.passengers} onChange={v => setFilters({ ...filters, passengers: v })} min={1} max={4} aria-label="Количество пассажиров" />
               </div>
-              <button
-                onClick={scrollToTripsFeed}
-                className="btn btn-primary h-12 px-6 tracking-wider"
-              >
-                Найти поездку
-              </button>
-            </motion.div>
-
-            <div className="flex flex-wrap gap-2 mt-6">
-              {quickRoutes.map(([a, b]) => (
-                <button
-                  key={a + b}
-                  onClick={() => setFilters({ ...filters, origin: a, destination: b })}
-                  className="chip chip-inactive"
-                >
-                  {a} → {b}
-                </button>
-              ))}
             </div>
-          </div>
+
+            <button onClick={scrollToTripsFeed} className="btn btn-primary hero-search-button w-full mt-5">
+              Найти поездку <ArrowRight size={17} />
+            </button>
+            <div className="hero-quick-routes mt-5 pt-4 border-t border-[var(--border)]">
+              <span className="eyebrow">ПОПУЛЯРНЫЕ НАПРАВЛЕНИЯ</span>
+              <div className="flex flex-wrap gap-2 mt-3">
+                {quickRoutes.map(([a, b]) => (
+                  <button key={a + b} onClick={() => setFilters(s => ({ ...s, origin: a, destination: b }))} className="chip chip-inactive">{a}<ArrowRight size={12} />{b}</button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
         </div>
-        <button
-          onClick={scrollToTripsFeed}
-          className="relative z-10 pb-8 text-center dot text-xs text-[var(--text-muted)] tracking-widest cursor-pointer hover:text-[var(--accent)] transition-colors"
-          aria-label="Scroll to trips"
-        >
-          [ SCROLL TO EXPLORE ]
+
+        <button onClick={scrollToTripsFeed} className="hero-scroll" aria-label="Перейти к ленте поездок">
+          <span /> ЛЕНТА ПОЕЗДОК
         </button>
       </section>
 
@@ -236,7 +228,7 @@ export default function Home() {
                   onClick={() => toggleFeat(f)}
                   className={`chip ${filters.feats.includes(f) ? 'chip-active' : 'chip-inactive'}`}
                 >
-                  {filters.feats.includes(f) && <span className="live-dot-sm" />}
+                  {filters.feats.includes(f) && <span aria-hidden="true" className="text-[var(--accent)]">✓</span>}
                   <span>{FEATURE_LABELS[f]}</span>
                 </button>
               ))}

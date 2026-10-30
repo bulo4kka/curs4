@@ -26,10 +26,10 @@ export default function Section({ id, index, title, children, className = '', va
     <motion.section
       id={id}
       {...v}
-      className={`max-w-6xl mx-auto px-4 py-20 md:py-28 ${className}`}
+      className={`site-section max-w-7xl mx-auto px-5 md:px-10 py-20 md:py-28 ${className}`}
     >
-      <div className="dot text-[var(--accent)] text-sm mb-4">[ {index} ]</div>
-      <h2 className="dot text-3xl md:text-5xl leading-tight mb-10">{title}</h2>
+      <div className="section-kicker"><span>{index.split('//')[0].trim()}</span>{index.split('//').slice(1).join('//').trim()}</div>
+      <h2 className="section-title">{title}</h2>
       {children}
     </motion.section>
   );

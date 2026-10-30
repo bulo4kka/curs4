@@ -41,7 +41,7 @@ export default function Chats() {
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, typingName]);
 
   if (!user) return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto p-8 text-center">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="page-shell max-w-5xl mx-auto p-8 text-center">
       <div className="surface rounded-xl p-12">
         <MessageSquare size={48} className="mx-auto text-[var(--text-muted)] mb-4" />
         <h1 className="dot text-2xl mb-2">Войдите, чтобы видеть чаты</h1>
@@ -63,12 +63,12 @@ export default function Chats() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-140px)] min-h-[600px]">
+    <div className="chats-page page-shell max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-140px)] min-h-[600px]">
       {/* Chat List */}
       <motion.aside
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="surface rounded-xl p-2 max-h-full overflow-auto scrollbar-thin"
+        className="surface chat-list rounded-2xl p-2 max-h-full overflow-auto scrollbar-thin"
       >
         <h2 className="dot text-sm px-3 py-2 text-[var(--text-dim)]">ЧАТЫ</h2>
         {chats.length === 0 ? (
@@ -107,7 +107,7 @@ export default function Chats() {
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="md:col-span-2 surface rounded-xl flex flex-col h-full"
+        className="md:col-span-2 surface chat-window rounded-2xl flex flex-col h-full"
       >
         {!active ? (
           <div className="flex-1 flex items-center justify-center">
@@ -144,13 +144,13 @@ export default function Chats() {
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-medium {m.sender_id === user.id ? 'text-white/80' : 'text-[var(--text-muted)]'}">{m.sender_name}</span>
-                      <span className="text-[9px] {m.sender_id === user.id ? 'text-white/50' : 'text-[var(--text-dim)]'}">{new Date(m.created_at).toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span className={`text-[10px] font-medium ${m.sender_id === user.id ? 'text-white/80' : 'text-[var(--text-muted)]'}`}>{m.sender_name}</span>
+                      <span className={`text-[9px] ${m.sender_id === user.id ? 'text-white/65' : 'text-[var(--text-dim)]'}`}>{new Date(m.created_at).toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                     <div>{m.text}</div>
                     {m.sender_id === user.id && (
                       <div className="flex items-center justify-end gap-1 mt-1">
-                        <span className="text-[9px] {m.is_read ? 'text-green-400' : 'text-white/50'}">{m.is_read ? '✓✓' : '✓'}</span>
+                        <span className={`text-[9px] ${m.is_read ? 'text-white' : 'text-white/65'}`}>{m.is_read ? '✓✓' : '✓'}</span>
                       </div>
                     )}
                   </motion.div>
